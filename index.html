@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    #inp{
+      font-size:40px;
+      width:100%;
+    }
+  </style>
+</head>
+
+<body>
+  <input id="inp" type="text" name="">
+  <div id="all">
+    <h4>input history: </h4>
+    <div></div>
+  </div>
+
+  <script>
+    var inp = document.querySelector('#inp')
+    var all = document.querySelector('#all >div')
+
+    var postData = function(data){
+      var x = new XMLHttpRequest()
+      x.open('POST', 'input')
+      x.send(data)
+      all.innerHTML = data + '<br> ' + all.innerHTML 
+    }
+
+    var r = new webkitSpeechRecognition()
+    r.onresult = function(ev) {
+      postData(ev.results[ev.results.length - 1][0].transcript)
+    }
+    r.onend = function() {
+      r.start()
+    }
+    r.start()
+
+    inp.addEventListener('keydown', function(ev){
+      console.log(ev.keyCode)
+      if(ev.keyCode === 13){
+        postData(ev.target.value)
+        ev.target.value = ''
+      }
+
+    })
+
+  </script>
+</body>
+
+</html>
